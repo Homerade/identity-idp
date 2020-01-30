@@ -285,13 +285,11 @@ describe Users::TwoFactorAuthenticationController do
       end
 
       it 'flashes an sms error when the telephony gem responds with an sms error' do
-        telephony_error = Telephony::TelephonyError.new('error message')
-
-        allow(Telephony).to receive(:send_confirmation_otp).and_raise(telephony_error)
+        @unconfirmed_phone = '+1 (225) 555-1000'
 
         get :send_code, params: { otp_delivery_selection_form: { otp_delivery_preference: 'sms' } }
 
-        expect(flash[:error]).to eq(telephony_error.friendly_message)
+        expect(flash[:error]).to eq(I18n.t('telephony.error.friendly_message.generic'))
       end
     end
 

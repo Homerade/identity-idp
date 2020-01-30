@@ -38,13 +38,11 @@ feature 'doc auth send link step' do
   end
 
   it 'does not proceed if Twilio raises a RestError' do
-    telephony_error = Telephony::TelephonyError.new('error message')
-    allow(Telephony).to receive(:send_doc_auth_link).and_raise(telephony_error)
-    fill_in :doc_auth_phone, with: '415-555-0199'
+    fill_in :doc_auth_phone, with: '225-555-1000'
     click_idv_continue
 
     expect(page).to have_current_path(idv_doc_auth_send_link_step)
-    expect(page).to have_content telephony_error.friendly_message
+    expect(page).to have_content I18n.t('telephony.error.friendly_message.generic')
   end
 
   it 'throttles sending the link' do
